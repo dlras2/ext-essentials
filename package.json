@@ -1,0 +1,64 @@
+{
+  "author": "Daniel Rasmussen <development@dlras.net> (https://dlras.net/)",
+  "bugs": {
+    "url": "https://github.com/dlras2/ext-essentials/issues"
+  },
+  "dependencies": {
+    "debug": "^3.1.0",
+    "require-directory": "^2.1.1"
+  },
+  "description": "",
+  "devDependencies": {
+    "eslint": "^4.15.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.5.0",
+    "husky": "^0.15.0-rc.3",
+    "js-yaml": "^3.10.0",
+    "lint-staged": "^6.1.0",
+    "mocha": "^5.0.0",
+    "mock-fs": "^4.4.2",
+    "mock-require": "^3.0.1",
+    "npm-run-all": "^4.1.2",
+    "nyc": "^11.4.1",
+    "prettier": "^1.10.2"
+  },
+  "homepage": "https://github.com/dlras2/ext-essentials#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm test"
+    }
+  },
+  "license": "ISC",
+  "lint-staged": {
+    "*.js": [
+      "node ./node_modules/eslint/bin/eslint.js --fix",
+      "git add"
+    ]
+  },
+  "main": "lib/index.js",
+  "name": "ext-essentials",
+  "nyc": {
+    "all": true,
+    "exclude": [
+      "coverage",
+      "test"
+    ],
+    "reporter": [
+      "html",
+      "text"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dlras2/ext-essentials.git"
+  },
+  "scripts": {
+    "coverage": "node ./node_modules/nyc/bin/nyc ./node_modules/mocha/bin/mocha && cmd /c start ./coverage/index.html",
+    "fix": "node ./node_modules/eslint/bin/eslint.js . --fix --ignore-path .gitignore",
+    "lint": "node ./node_modules/eslint/bin/eslint.js . --ignore-path .gitignore",
+    "test": "node ./node_modules/npm-run-all/bin/npm-run-all lint test-* -nc --silent",
+    "test-mocha": "node ./node_modules/mocha/bin/mocha"
+  },
+  "version": "0.0.0"
+}
