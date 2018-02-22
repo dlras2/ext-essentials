@@ -1,11 +1,10 @@
 const assert = require('assert');
-const mock = require('mock-require');
 
 let serialize;
 
 describe('Integration | serialize', () => {
   beforeEach(() => {
-    serialize = mock.reRequire('../../lib/serialize');
+    serialize = require('../../lib/').serialize;
   });
 
   it('should serialize json', done => {

@@ -1,13 +1,12 @@
 const assert = require('assert');
 const fs = require('fs');
-const mock = require('mock-require');
 const mockFs = require('mock-fs');
 
 let edit;
 
 describe('Integration | edit', () => {
   beforeEach(() => {
-    edit = mock.reRequire('../../lib/edit');
+    edit = require('../../lib').edit;
   });
 
   it('should edit json', done => {

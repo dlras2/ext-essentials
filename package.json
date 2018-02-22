@@ -9,6 +9,7 @@
   },
   "description": "",
   "devDependencies": {
+    "clear-require": "^2.0.0",
     "eslint": "^4.15.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-prettier": "^2.5.0",

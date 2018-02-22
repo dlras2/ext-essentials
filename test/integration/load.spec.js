@@ -1,12 +1,11 @@
 const assert = require('assert');
-const mock = require('mock-require');
 const mockFs = require('mock-fs');
 
 let load;
 
 describe('Integration | load', () => {
   beforeEach(() => {
-    load = mock.reRequire('../../lib/load');
+    load = require('../../lib').load;
   });
 
   it('should load json', done => {

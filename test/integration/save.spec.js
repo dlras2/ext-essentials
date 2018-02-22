@@ -11,7 +11,7 @@ describe('Integration | save', () => {
         callback(null);
       }
     });
-    save = mock.reRequire('../../lib/save');
+    save = require('../../lib').save;
   });
 
   it('should save json', done => {
