@@ -5,3 +5,5 @@ afterEach(() => {
   mockFs.restore();
   mock.stopAll();
 });
+
+process.on('unhandledRejection', e => console.error(e));

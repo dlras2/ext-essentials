@@ -50,7 +50,7 @@ describe('Integration | edit', () => {
     });
   });
 
-  it('should edit yaml', done => {
+  it('should edit gzipped json', done => {
     // Arrange
     mockFs({
       'data.json.gz': Buffer.from(
@@ -71,6 +71,30 @@ describe('Integration | edit', () => {
       // Assert
       assert.equal(err, null);
       assert.deepEqual(actual, expected);
+      done();
+    });
+  });
+
+  it('should edit zip archives with json', done => {
+    // Arrange
+    mockFs({
+      'data.zip': Buffer.from(
+        'UEsDBAoAAAAAADmAVkzRQQnYEQAAABEAAAAKAAAAZGF0YTEuanNvbnsiaGVsbG8iOiJ3b3JsZCJ9UEsDBAoAAAAAADmAVkwe4UsMFAAAABQAAAAKAAAAZGF0YTIuanNvbnsiZ29vZG5pZ2h0IjoibW9vbiJ9UEsBAhQACgAAAAAAOYBWTNFBCdgRAAAAEQAAAAoAAAAAAAAAAAAAAAAAAAAAAGRhdGExLmpzb25QSwECFAAKAAAAAAA5gFZMHuFLDBQAAAAUAAAACgAAAAAAAAAAAAAAAAA5AAAAZGF0YTIuanNvblBLBQYAAAAAAgACAHAAAAB1AAAAAAA=',
+        'base64'
+      )
+    });
+    const file = 'data.zip';
+    const mutate = data => {
+      data['data1.json'].hello += '!';
+      data['data2.json'].goodbye += '!';
+      return data;
+    };
+    const options = {};
+    // Act
+    edit(file, mutate, options, err => {
+      // Assert
+      assert.equal(err, null);
+      // TODO: Account for timestamp changes in result
       done();
     });
   });

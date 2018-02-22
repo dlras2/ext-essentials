@@ -52,4 +52,21 @@ describe('Integration | serialize', () => {
       done();
     });
   });
+
+  it('should serialize zip archives with json', done => {
+    // Arrange
+    const file = 'data.zip';
+    const data = {
+      'data1.json': { hello: 'world' },
+      'data2.json': { goodnight: 'moon' }
+    };
+    const options = {};
+    // Act
+    serialize(file, data, options, (err, actual) => {
+      // Assert
+      assert.equal(err, null);
+      // TODO: Account for timestamp changes in result
+      done();
+    });
+  });
 });
