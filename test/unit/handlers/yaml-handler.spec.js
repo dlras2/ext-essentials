@@ -33,6 +33,16 @@ describe('Unit | YamlHandler', () => {
     assert.throws(() => new YamlHandler(), expected);
   });
 
+  it('should require js-yaml only once', () => {
+    // Arrange
+    new YamlHandler();
+    mock('js-yaml', './missing');
+    // Act
+    const actual = new YamlHandler();
+    // Assert
+    assert.ok(actual);
+  });
+
   describe('deserialize', () => {
     it('should accept loading options', done => {
       // Arrange

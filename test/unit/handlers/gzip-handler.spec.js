@@ -1,4 +1,5 @@
 const assert = require('assert');
+const mock = require('mock-require');
 
 let GzipHandler;
 
@@ -22,6 +23,16 @@ describe('Unit | GzipHandler', () => {
     const handler = new GzipHandler(options);
     // Assert
     assert.equal(handler.options, options);
+  });
+
+  it('should require zlib only once', () => {
+    // Arrange
+    new GzipHandler();
+    mock('zlib', './missing');
+    // Act
+    const actual = new GzipHandler();
+    // Assert
+    assert.ok(actual);
   });
 
   describe('deserialize', () => {

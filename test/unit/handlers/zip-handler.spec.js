@@ -26,12 +26,32 @@ describe('Unit | ZipHandler', () => {
     assert.equal(handler.options, options);
   });
 
+  it('should set context during construction', () => {
+    // Arrange
+    const options = {};
+    const context = {};
+    // Act
+    const handler = new ZipHandler(options, context);
+    // Assert
+    assert.equal(handler.context, context);
+  });
+
   it('should throw error when missing jszip', () => {
     // Arrange
     mock('jszip', './missing');
     const expected = /Cannot find module/;
     // Act / Assert
     assert.throws(() => new ZipHandler(), expected);
+  });
+
+  it('should require jszip only once', () => {
+    // Arrange
+    new ZipHandler();
+    mock('jszip', './missing');
+    // Act
+    const actual = new ZipHandler();
+    // Assert
+    assert.ok(actual);
   });
 
   describe('deserialize', () => {});
@@ -106,5 +126,73 @@ describe('Unit | ZipHandler', () => {
         done();
       });
     });
+  });
+
+  describe('buildHandlersForAllKeys', () => {
+    it('should call handlers.buildHandlersForAll with keys and context options', () => {
+      // Arrange
+      const options = {};
+      const context = { file: 'data.zip', options: { zip: options } };
+      const keys = ['data1.json', 'data2.json'];
+      let actualKeys, actualOptions;
+      mock('../../../lib/handlers', {
+        buildHandlersForAll(keys, options) {
+          actualKeys = keys;
+          actualOptions = options;
+          return {};
+        }
+      });
+      ZipHandler = mock.reRequire('../../../lib/handlers/zip-handler');
+      const handler = new ZipHandler(options, context);
+      // Act
+      handler.buildHandlersForAllKeys(keys);
+      // Assert
+      assert.equal(actualKeys, keys);
+      assert.equal(actualOptions, context.options);
+    });
+
+    it('should return errors from handlers.buildHandlersForAll', () => {
+      // Arrange
+      const keys = ['data1.json', 'data2.json'];
+      const err = 'Error from handlers.buildHandlersForAll';
+      const expected = /Error from handlers\.buildHandlersForAll/;
+      mock('../../../lib/handlers', {
+        buildHandlersForAll(keys, options) {
+          return { err };
+        }
+      });
+      ZipHandler = mock.reRequire('../../../lib/handlers/zip-handler');
+      const handler = new ZipHandler();
+      // Act
+      const actual = handler.buildHandlersForAllKeys(keys);
+      // Assert
+      assert.throws(assert.ifError.bind(this, actual.err), expected);
+    });
+  });
+
+  it('should return handlersMap with added file context', () => {
+    // Arrange
+    const options = {};
+    const context = { file: 'data.zip', options: { zip: options } };
+    const keys = ['data1.json', 'data2.json'];
+    const handlersMap = {
+      'data1.json': { file: 'data1.json' },
+      'data2.json': { file: 'data2.json' }
+    };
+    const expected = {
+      'data1.json': { file: 'data.zip:data1.json' },
+      'data2.json': { file: 'data.zip:data2.json' }
+    };
+    mock('../../../lib/handlers', {
+      buildHandlersForAll(keys, options) {
+        return { handlersMap };
+      }
+    });
+    ZipHandler = mock.reRequire('../../../lib/handlers/zip-handler');
+    const handler = new ZipHandler(options, context);
+    // Act
+    const actual = handler.buildHandlersForAllKeys(keys);
+    // Assert
+    assert.deepEqual(actual.handlersMap, expected);
   });
 });
