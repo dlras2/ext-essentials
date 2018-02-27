@@ -54,7 +54,37 @@ describe('Unit | ZipHandler', () => {
     assert.ok(actual);
   });
 
-  describe('deserialize', () => {});
+  describe('deserialize', () => {
+    it('should pass loaded keys to buildHandlersForAllKeys', done => {
+      // Arrange
+      const mockZip = { files: { 'data1.json': {}, 'data2.json': {} } };
+      const expectedKeys = ['data1.json', 'data2.json'];
+      const expectedBuffer = new Buffer(0);
+      const expectedErr = new Error();
+      let actualBuffer, actualKeys;
+      mock('jszip', {
+        loadAsync(buffer) {
+          actualBuffer = buffer;
+          return new Promise((resolve, reject) => resolve(mockZip));
+        }
+      });
+      ZipHandler = mock.reRequire('../../../lib/handlers/zip-handler');
+      const handler = new ZipHandler();
+      handler.buildHandlersForAllKeys = keys => {
+        actualKeys = keys;
+        return { err: expectedErr };
+      };
+      // Act
+      handler.deserialize(expectedBuffer, (err, result) => {
+        // Assert
+        assert.equal(actualBuffer, expectedBuffer);
+        assert.deepEqual(actualKeys, expectedKeys);
+        assert.equal(err, expectedErr);
+        assert.equal(result, null);
+        done();
+      });
+    });
+  });
 
   describe('serialize', () => {
     it('should refuse to zip null', done => {

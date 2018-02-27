@@ -56,7 +56,7 @@
     "url": "git+https://github.com/dlras2/ext-essentials.git"
   },
   "scripts": {
-    "coverage": "node ./node_modules/nyc/bin/nyc npm run test-unit && cmd /c start ./coverage/index.html",
+    "coverage": "node ./node_modules/nyc/bin/nyc npm run test-all && cmd /c start ./coverage/index.html",
     "fix": "node ./node_modules/eslint/bin/eslint.js . --fix --ignore-path .gitignore",
     "lint": "node ./node_modules/eslint/bin/eslint.js . --ignore-path .gitignore",
     "test": "node ./node_modules/npm-run-all/bin/npm-run-all lint test-all -nc --silent",
