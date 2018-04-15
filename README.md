@@ -122,7 +122,7 @@ ee.alias('.dat', '.json.gz');
 ```javascript
 const ee = require('ext-essentials');
 ee.alias(/\.gz\d+\b/i, match => {
-  const n = parseInt(match[0].substring(3));
+  const n = parseInt(match.substring(3));
   return '.gz'.repeat(n);
 });
 // .gz3 will be treated as a file gzipped three times in a row,
