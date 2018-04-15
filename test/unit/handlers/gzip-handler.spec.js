@@ -49,24 +49,6 @@ describe('Unit | GzipHandler', () => {
         done();
       });
     });
-
-    it('should return errors from bad options', done => {
-      // Arrange
-      const options = { chunkSize: 0 };
-      const handler = new GzipHandler(options);
-      const buffer = Buffer.from(
-        'H4sIAAAAAAAACqtWykjNyclXslIqzy/KSVGqBQDRQQnYEQAAAA==',
-        'base64'
-      );
-      const expected = /ERR_INVALID_OPT_VALUE/;
-      // Act
-      handler.deserialize(buffer, (err, result) => {
-        // Assert
-        assert.throws(assert.ifError.bind(this, err), expected);
-        assert.equal(result, null);
-        done();
-      });
-    });
   });
 
   describe('serialize', () => {
@@ -78,22 +60,7 @@ describe('Unit | GzipHandler', () => {
       // Act
       handler.serialize(data, (err, result) => {
         // Assert
-        assert.throws(assert.ifError.bind(this, err), expected);
-        assert.equal(result, null);
-        done();
-      });
-    });
-
-    it('should return errors from bad options', done => {
-      // Arrange
-      const options = { chunkSize: 0 };
-      const handler = new GzipHandler(options);
-      const data = '{"hello":"world"}';
-      const expected = /ERR_INVALID_OPT_VALUE/;
-      // Act
-      handler.serialize(data, (err, result) => {
-        // Assert
-        assert.throws(assert.ifError.bind(this, err), expected);
+        assert.ok(err);
         assert.equal(result, null);
         done();
       });
