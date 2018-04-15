@@ -8,6 +8,21 @@ describe('Integration | load', () => {
     load = require('../../lib').load;
   });
 
+  it('should load strings', done => {
+    // Arrange
+    mockFs({ 'data.txt': new Buffer('Hello World') });
+    const file = 'data.txt';
+    const options = {};
+    const expected = 'Hello World';
+    // Act
+    load(file, options, (err, actual) => {
+      // Assert
+      assert.equal(err, null);
+      assert.deepEqual(actual, expected);
+      done();
+    });
+  });
+
   it('should load json', done => {
     // Arrange
     mockFs({ 'data.json': '{"hello":"world"}' });

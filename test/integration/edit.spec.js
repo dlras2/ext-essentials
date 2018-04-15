@@ -9,6 +9,26 @@ describe('Integration | edit', () => {
     edit = require('../../lib').edit;
   });
 
+  it('should edit strings', done => {
+    // Arrange
+    mockFs({ 'data.txt': new Buffer('Hello World') });
+    const file = 'data.txt';
+    const mutate = data => {
+      data += '!';
+      return data;
+    };
+    const options = {};
+    const expected = new Buffer('Hello World!');
+    // Act
+    edit(file, mutate, options, err => {
+      const actual = fs.readFileSync('data.txt');
+      // Assert
+      assert.equal(err, null);
+      assert.deepEqual(actual, expected);
+      done();
+    });
+  });
+
   it('should edit json', done => {
     // Arrange
     mockFs({ 'data.json': '{"hello":"world"}' });

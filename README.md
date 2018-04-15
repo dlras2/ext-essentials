@@ -153,6 +153,12 @@ ee.save('data.dat', { hello: 'world' }, options, err => {
 
 ## Handlers
 
+### text-handler
+
+* Requires: n/a (native)
+* Handles: `.txt`
+* Serializer/Deserializer: [`Buffer`](https://nodejs.org/api/buffer.html)
+
 ### json-handler
 
 * Requires: n/a (native)
@@ -185,7 +191,6 @@ This handler serializes and deserializes multi-file zip archives. It loads the f
 
 ## TODO
 
-* [ ] TXT handler
 * [ ] XML handler
 * [ ] CSV handler
 * [ ] Positional (array-based) options

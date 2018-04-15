@@ -14,6 +14,21 @@ describe('Integration | save', () => {
     save = require('../../lib').save;
   });
 
+  it('should save strings', done => {
+    // Arrange
+    const file = 'data.txt';
+    const data = 'Hello World';
+    const options = {};
+    const expected = new Buffer('Hello World');
+    // Act
+    save(file, data, options, err => {
+      // Assert
+      assert.equal(err, null);
+      assert.deepEqual(written.buffer, expected);
+      done();
+    });
+  });
+
   it('should save json', done => {
     // Arrange
     const file = 'data.json';
