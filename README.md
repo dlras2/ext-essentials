@@ -137,6 +137,19 @@ The type of data these functions accept and return depends on which handlers are
 
 * `options` &lt;Object&gt;
   * `alias` &lt;string&gt; **Default:** `undefined`
+  * _`handler`_ &lt;Object&gt;
+
+```javascript
+const ee = require('ext-essentials');
+const options = {
+  alias: 'data.json.gz',
+  json: { space: 2 },
+  gz: { level: 9 }
+};
+ee.save('data.dat', { hello: 'world' }, options, err => {
+  // data has been stringified, g-zipped, and written to disk
+});
+```
 
 ## Handlers
 
@@ -144,18 +157,35 @@ The type of data these functions accept and return depends on which handlers are
 
 * Requires: n/a (native)
 * Handles: `.json`
+* Serializer: [`JSON.stringify`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
+  * Options: `{` [`replacer`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_replacer_parameter), [`space`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_space_parameter) `}`
+* Deserializer: [`JSON.parse`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse)
+  * Options: `{` [`reviver`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse#Using_the_reviver_parameter) `}`
 
 ### gzip-handler
 
 * Requires: n/a (native)
 * Handles: `.gz`, `.gzip`
+* Serializer: [`zlib.gzip`](https://nodejs.org/api/zlib.html#zlib_zlib_gzip_buffer_options_callback) ([options](https://nodejs.org/api/zlib.html#zlib_class_options))
+* Deserializer: [`zlib.unzip`](https://nodejs.org/api/zlib.html#zlib_zlib_unzip_buffer_options_callback) ([options](https://nodejs.org/api/zlib.html#zlib_class_options))
 
 ### yaml-handler
 
 * Requires: [js-yaml](https://www.npmjs.com/package/js-yaml)
 * Handles: `.yml`, `.yaml`
+* Serializer: [`jsYaml.safeDump`](https://github.com/nodeca/js-yaml#safedump-object---options-)
+* Deserializer: [`jsYaml.safeLoad`](https://github.com/nodeca/js-yaml#safeload-string---options-)
 
 ### zip-handler
 
 * Requires: [jszip](https://www.npmjs.com/package/jszip)
 * Handles: `.zip`
+
+This handler serializes and deserializes multi-file zip archives. It loads the files as an object, with each key being the path of an archived file, and its value being the data loaded and deserialized by its extensions. It saves in the opposite fashion.
+
+## TODO
+
+* [ ] TXT handler
+* [ ] XML handler
+* [ ] CSV handler
+* [ ] Positional (array-based) options
