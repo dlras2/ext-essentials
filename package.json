@@ -64,5 +64,5 @@
     "test-unit": "node ./node_modules/mocha/bin/mocha --grep Unit",
     "test-integration": "node ./node_modules/mocha/bin/mocha --grep Integration"
   },
-  "version": "0.0.0"
+  "version": "0.0.1"
 }

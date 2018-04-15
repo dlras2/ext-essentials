@@ -1,5 +1,7 @@
 # ext-essentials
 
+[![npm](https://img.shields.io/npm/v/ext-essentials.svg)](https://www.npmjs.com/package/ext-essentials)
+
 Replaces your repetitive read/write and serialize/deserialize boilerplate code with intuitive extension-based conventions. Treat files like data, and let ext-essentials handle the rest!
 
 ## Usage
