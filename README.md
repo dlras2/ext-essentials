@@ -9,11 +9,10 @@ Replaces your repetitive read/write and serialize/deserialize boilerplate code w
 #### load(file[, options], callback)
 
 * `file` &lt;string&gt;
-* `options` &lt;Object&gt;
-  * `alias` &lt;string&gt; **Default:** `undefined`
+* `options` (_see [options](#Options)_)
 * `callback` &lt;Function&gt;
   * `err` &lt;Error&gt;
-  * `data`
+  * `data` (_see [data](#Data)_)
 
 Use `load` to read a file from the file system, deserialize it according to its extensions, and return the data represented inside.
 
@@ -28,9 +27,8 @@ ee.load('data.json.gz', (err, data) => {
 #### save(file, data[, options], callback)
 
 * `file` &lt;string&gt;
-* `data`
-* `options` &lt;Object&gt;
-  * `alias` &lt;string&gt; **Default:** `undefined`
+* `data` (_see [data](#Data)_)
+* `options` (_see [options](#Options)_)
 * `callback` &lt;Function&gt;
   * `err` &lt;Error&gt;
 
@@ -47,9 +45,8 @@ ee.save('data.json.gz', { hello: 'world' }, err => {
 
 * `file` &lt;string&gt;
 * `mutator` &lt;Function&gt;
-  * `data`
-* `options` &lt;Object&gt;
-  * `alias` &lt;string&gt; **Default:** `undefined`
+  * `data` (_see [data](#Data)_)
+* `options` (_see [options](#Options)_)
 * `callback` &lt;Function&gt;
   * `err` &lt;Error&gt;
 
@@ -73,11 +70,10 @@ ee.edit(
 
 * `file` &lt;string&gt;
 * `buffer` &lt;Buffer&gt;
-* `options` &lt;Object&gt;
-  * `alias` &lt;string&gt; **Default:** `undefined`
+* `options` (_see [options](#Options)_)
 * `callback` &lt;Function&gt;
   * `err` &lt;Error&gt;
-  * `data`
+  * `data` (_see [data](#Data)_)
 
 Use `deserialize` to deserialize data according to given extensions, and return the data represented inside. Useful for when you have a buffer and file name, but the data doesn't live in the file system.
 
@@ -92,9 +88,8 @@ ee.deserialize('data.json.gz', buffer, (err, data) => {
 #### serialize(file, data[, options], callback)
 
 * `file` &lt;string&gt;
-* `data`
-* `options` &lt;Object&gt;
-  * `alias` &lt;string&gt; **Default:** `undefined`
+* `data` (_see [data](#Data)_)
+* `options` (_see [options](#Options)_)
 * `callback` &lt;Function&gt;
   * `err` &lt;Error&gt;
   * `buffer` &lt;Buffer&gt;
@@ -133,3 +128,34 @@ ee.alias(/\.gz\d+\b/i, match => {
 // .gz3 will be treated as a file gzipped three times in a row,
 // for when you want to make super-duper sure it's compressed
 ```
+
+### Data
+
+The type of data these functions accept and return depends on which handlers are used and in which order. Handlers such as the [JSON](#json-handler) and [YAML](#yaml-handler) handlers accept most kinds of input. Serializing straight to the [Gzip](#gzip-handler) or [Zip](#zip-handler) handlers, for example, have other restrictions and expectations. For more info, see the [handlers section](#Handlers).
+
+### Options
+
+* `options` &lt;Object&gt;
+  * `alias` &lt;string&gt; **Default:** `undefined`
+
+## Handlers
+
+### json-handler
+
+* Requires: n/a (native)
+* Handles: `.json`
+
+### gzip-handler
+
+* Requires: n/a (native)
+* Handles: `.gz`, `.gzip`
+
+### yaml-handler
+
+* Requires: [js-yaml](https://www.npmjs.com/package/js-yaml)
+* Handles: `.yml`, `.yaml`
+
+### zip-handler
+
+* Requires: [jszip](https://www.npmjs.com/package/jszip)
+* Handles: `.zip`
