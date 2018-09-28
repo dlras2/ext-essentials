@@ -71,25 +71,25 @@ describe('Integration | edit', () => {
 
   it('should edit gzipped json', done => {
     // Arrange
-    mockFs({
-      'data.json.gz': Buffer.from(
-        'H4sIAAAAAAAACqtWykjNyclXslIqzy/KSVGqBQDRQQnYEQAAAA==',
-        'base64'
-      )
-    });
+    const buffer = Buffer.from(
+      'H4sIAAAAAAAACqtWykjNyclXslIqzy/KSVGqBQDRQQnYEQAAAA==',
+      'base64'
+    );
+    mockFs({ 'data.json.gz': buffer });
     const file = 'data.json.gz';
     const mutate = data => {
       data.hello += '!';
       return data;
     };
     const options = {};
-    const expected = 'H4sIAAAAAAAACqtWykjNyclXslIqzy/KSVFUqgUAzfbfMhIAAAA=';
+    const expectedLength = 38;
     // Act
     edit(file, mutate, options, err => {
-      const actual = fs.readFileSync('data.json.gz').toString('base64');
+      const actual = fs.readFileSync('data.json.gz');
       // Assert
       assert.equal(err, null);
-      assert.deepEqual(actual, expected);
+      assert.deepEqual(actual.length, expectedLength);
+      assert.notDeepEqual(actual, buffer);
       done();
     });
   });
